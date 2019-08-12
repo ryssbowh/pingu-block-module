@@ -1,12 +1,13 @@
 {
     "name": "Block",
     "alias": "block",
-    "description": "",
+    "description": "Block API",
     "keywords": [],
     "core": 1,
     "order": 2,
     "providers": [
-        "Pingu\\Block\\Providers\\BlockServiceProvider"
+        "Pingu\\Block\\Providers\\BlockServiceProvider",
+        "Pingu\\Block\\Providers\\ConsoleServiceProvider"
     ],
     "aliases": {
         "Blocks": "Pingu\\Block\\Facades\\Blocks",

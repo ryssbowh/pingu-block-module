@@ -4,6 +4,7 @@ namespace Pingu\Block\Providers;
 
 use Illuminate\Database\Eloquent\Factory;
 use Pingu\Block\BlockCreator;
+use Pingu\Block\BlockProviders\ClassBlockProvider;
 use Pingu\Block\BlockProviders\DbBlockProvider;
 use Pingu\Block\Blocks;
 use Pingu\Block\Entities\Block;
@@ -20,23 +21,13 @@ class BlockServiceProvider extends ModuleServiceProvider
     public function boot()
     {
         $this->registerModelSlugs(__DIR__.'/../'.$this->modelFolder);
-        $this->registerTranslations();
-        $this->registerConfig();
         $this->loadViewsFrom(__DIR__ . '/../Resources/views', 'block');
-        $this->registerFactories();
         $this->registerCreatorModels();
-        //$this->registerAssets();
     }
 
     /**
-     * Register js and css for this module
+     * Registers models that can be used through the DbBlockProvider
      */
-    public function registerAssets()
-    {
-        \Asset::container('modules')->add('block-js', 'module-assets/Block.js');
-        \Asset::container('modules')->add('block-css', 'module-assets/Block.css');
-    }
-
     public function registerCreatorModels()
     {
         \BlockCreator::registerModel(BlockText::class);
@@ -51,21 +42,16 @@ class BlockServiceProvider extends ModuleServiceProvider
     {
         $this->app->singleton('blocks', Blocks::class);
         $this->app->singleton('block', Block::class);
-        $this->app->singleton('block.creator', BlockCreator::class);
-        $this->app->singleton('block.providers.db', DbBlockProvider::class);
+        $this->app->singleton('block.creator', function($app){
+            return new BlockCreator;
+        });
+        $this->app->singleton(DbBlockProvider::class, function($app){
+            return new DbBlockProvider;
+        });
+        $this->app->singleton(ClassBlockProvider::class, function($app){
+            return new ClassBlockProvider;
+        });
         $this->app->register(RouteServiceProvider::class);
-    }
-
-    /**
-     * Register config.
-     *
-     * @return void
-     */
-    protected function registerConfig()
-    {
-        $this->mergeConfigFrom(
-            __DIR__.'/../Config/config.php', 'block'
-        );
     }
 
     /**
@@ -82,29 +68,5 @@ class BlockServiceProvider extends ModuleServiceProvider
         } else {
             $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'block');
         }
-    }
-
-    /**
-     * Register an additional directory of factories.
-     * 
-     * @return void
-     */
-    public function registerFactories()
-    {
-        if (! app()->environment('production')) {
-            app(Factory::class)->load(__DIR__ . '/../Database/factories');
-        }
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return [
-            'block.providers.db'
-        ];
     }
 }

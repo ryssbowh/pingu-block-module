@@ -41,6 +41,12 @@ class BlockCreator
     	return isset($this->models[$slug]);
     }
 
+    /**
+     * gets the model that defines a slug
+     * 
+     * @param  string $slug
+     * @return string
+     */
     public function getModel(string $slug)
     {
         if(!$this->isSlugRegistered($slug)){
@@ -59,11 +65,21 @@ class BlockCreator
     	return $this->models;
     }
 
+    /**
+     * Create uri
+     * 
+     * @return string
+     */
     public static function createUri()
     {
         return 'blocks/create/{blockSlug}';
     }
 
+    /**
+     * store uri
+     * 
+     * @return string
+     */
     public static function storeUri()
     {
         return 'blocks/create/{blockSlug}';

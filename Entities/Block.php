@@ -8,52 +8,21 @@ use Pingu\Forms\Traits\Models\Formable;
 use Pingu\Page\Entities\Page;
 use Pingu\Page\Entities\PageRegion;
 
-class Block extends BaseModel implements FormableContract
+class Block extends BaseModel
 {
-    use Formable;
-
-    protected $fillable = ['provider', 'data', 'system'];
+    protected $fillable = ['provider', 'data'];
 
     protected $with = ['provider'];
 
-    protected $visible = ['id', 'system', 'provider'];
+    protected $visible = ['id', 'provider'];
 
     protected $casts = [
         'data' => 'json'
     ];
 
-    protected $attributes = [
-        'system' => 0
-    ];
-
-    public function formAddFields()
-    {
-        return [];
-    }
-
-    public function formEditFields()
-    {
-        return [];
-    }
-
-    public function fieldDefinitions()
-    {
-        return [];
-    }
-
-    public function validationRules()
-    {
-        return [];
-    }
-
-    public function validationMessages()
-    {
-        return [];
-    }
-
     public function instance()
     {
-        return $this->provider->class::load($this);
+        return \Blocks::load($this);
     }
 
     public function regions()

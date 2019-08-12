@@ -1,0 +1,11 @@
+<?php
+
+namespace $NAMESPACE$;
+
+use Pingu\Block\Contracts\BlockContract;
+use Pingu\Block\Support\ClassBlock;
+
+class $CLASS$ implements BlockContract
+{
+	use ClassBlock;
+} 

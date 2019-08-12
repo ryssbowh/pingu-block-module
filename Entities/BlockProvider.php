@@ -11,12 +11,19 @@ class BlockProvider extends BaseModel implements HasRouteSlugContract
     
     protected $visible = ['id', 'name', 'class'];
 
-    public static function routeSlug(){
+    public static function routeSlug()
+    {
     	return 'provider';
     }
 
-    public static function routeSlugs(){
+    public static function routeSlugs()
+    {
     	return 'provider';
+    }
+
+    public static function findByClass(string $class)
+    {
+        return static::where(['class' => $class])->first();
     }
 
     public function blocks()

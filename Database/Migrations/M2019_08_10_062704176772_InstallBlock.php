@@ -23,7 +23,6 @@ class M2019_08_10_062704176772_InstallBlock extends Migration
 
         Schema::create('blocks', function (Blueprint $table) {
             $table->increments('id');
-            $table->boolean('system');
             $table->json('data');
             $table->integer('provider_id')->unsigned()->index();
             $table->foreign('provider_id')->references('id')->on('block_providers')->onDelete('cascade');

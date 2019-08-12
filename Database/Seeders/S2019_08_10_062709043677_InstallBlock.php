@@ -1,13 +1,14 @@
 <?php
 
+use Pingu\Block\BlockProviders\ClassBlockProvider;
 use Pingu\Block\BlockProviders\DbBlockProvider;
 use Pingu\Block\Entities\Block;
 use Pingu\Block\Entities\BlockCreator;
 use Pingu\Block\Entities\BlockProvider;
 use Pingu\Block\Entities\BlockText;
-use Pingu\Block\TestBlock;
 use Pingu\Core\Seeding\DisableForeignKeysTrait;
 use Pingu\Core\Seeding\MigratableSeeder;
+use Pingu\Permissions\Entities\Permission;
 
 class S2019_08_10_062709043677_InstallBlock extends MigratableSeeder
 {
@@ -18,7 +19,7 @@ class S2019_08_10_062709043677_InstallBlock extends MigratableSeeder
      */
     public function run(): void
     {
-        Permissions::create(['name' => 'create blocks']);
+        Permission::create(['name' => 'create blocks', 'section' => 'Block']);
 
         $block = BlockText::create([
             'name' => 'text',
@@ -26,30 +27,22 @@ class S2019_08_10_062709043677_InstallBlock extends MigratableSeeder
         ]);
 
         $p1 = BlockProvider::create([
-            'name' => 'First text block',
+            'name' => 'Database',
             'class' => DbBlockProvider::class
         ]);
 
         $p2 = BlockProvider::create([
-            'name' => 'text',
-            'class' => TestBlock::class
+            'name' => 'Class',
+            'class' => ClassBlockProvider::class
         ]);
 
         $block = new Block([
-            'system' => false,
             'data' => [
                 'entity' => BlockText::class,
                 'id' => $block->id
             ]
         ]);
         $block->provider()->associate($p1)->save();
-
-        $block = new Block([
-            'provider_id' => $p2->id,
-            'system' => true,
-            'data' => []
-        ]);
-        $block->provider()->associate($p2)->save();
     }
 
     /**

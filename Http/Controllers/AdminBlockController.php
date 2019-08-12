@@ -2,6 +2,7 @@
 
 namespace Pingu\Block\Http\Controllers;
 
+use Pingu\Block\BlockProviders\DbBlockProvider;
 use Pingu\Block\Entities\Block;
 use Pingu\Core\Http\Controllers\BaseController;
 use Pingu\Forms\Support\ModelForm;
@@ -9,7 +10,13 @@ use Pingu\Forms\Support\ModelForm;
 class AdminBlockController extends BaseController
 {
 
-	public function create($blockSlug)
+	/**
+	 * Creates a form to add a block
+	 * 
+	 * @param  string $blockSlug
+	 * @return view
+	 */
+	public function create(string $blockSlug)
 	{
 		$blockModel = \BlockCreator::getModel($blockSlug);
 		$form = new ModelForm(
@@ -26,7 +33,13 @@ class AdminBlockController extends BaseController
 		]);
 	}
 
-	public function store($blockSlug)
+	/**
+	 * Stores a block
+	 * 
+	 * @param  string $blockSlug
+	 * @return redirect
+	 */
+	public function store(string $blockSlug)
 	{
 		$post = $this->request->post();
 		$modelStr = \BlockCreator::getModel($blockSlug);
@@ -36,7 +49,7 @@ class AdminBlockController extends BaseController
 
 		$model->formFill($validated)->save();
 
-		$dbProvider = app('block.providers.db')::getModel();
+		$dbProvider = app(DbBlockProvider::class)->getModel();
 
 		$block = new Block([
 			'data' => [

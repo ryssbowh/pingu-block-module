@@ -8,5 +8,10 @@ use Pingu\Forms\Contracts\Models\FormableContract;
 
 interface CreatableBlockContract extends BlockContract, FormableContract
 {
+	/**
+	 * Slug forthis block (for creating/editing)
+	 * 
+	 * @return string
+	 */
 	public static function blockSlug();
 }

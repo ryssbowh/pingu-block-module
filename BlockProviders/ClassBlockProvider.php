@@ -6,20 +6,15 @@ use Pingu\Block\Contracts\BlockContract;
 use Pingu\Block\Entities\Block;
 use Pingu\Block\Support\BlockProvider;
 
-class DbBlockProvider extends BlockProvider
+class ClassBlockProvider extends BlockProvider
 {
 	public function load(Block $block): BlockContract
 	{
-		$entity = $block->data['entity'];
-		$id = $block->data['id'];
-		$entity = $entity::findOrFail($id);
-		$entity->setBlock($block);
-		$entity->setProvider($this);
-		return $entity;
+		return new $block->data['class']($block, $this);
 	}
 
 	public function getName()
 	{
-		return 'db';
+		return 'class';
 	}
 }

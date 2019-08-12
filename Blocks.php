@@ -5,19 +5,33 @@ namespace Pingu\Block;
 use Illuminate\Support\Collection;
 use Pingu\Block\Contracts\BlockContract;
 use Pingu\Block\Entities\Block;
+use Pingu\Block\Entities\BlockProvider;
 
 class Blocks{
 
 	/**
-	 * Loads and returns one block by its id
+	 * Resolve a provider within the application container
 	 * 
-	 * @param  int    $id
+	 * @param  BlockProvider $provider
+	 * @return Pingu\Block\Support\BlockProvider
+	 */
+	public function resolveProvider(BlockProvider $provider)
+	{
+		return app($provider->class);
+	}
+
+	/**
+	 * Loads and returns one block
+	 * 
+	 * @param  int|Block    $id
 	 * @return BlockContract
 	 */
-	public function loadOne(int $id)
+	public function loadOne($block)
 	{
-		$block = Block::findOrFail($id);
-		return $block->provider->class::load($block);
+		if(is_int($block)){
+			$block = Block::findOrFail($block);
+		}
+		return $this->resolveProvider($block->provider)->load($block);
 	}
 
 	/**
@@ -55,7 +69,7 @@ class Blocks{
 	public function all()
 	{
 		return Block::all()->map(function($block){
-			return $block->provider->class::load($block);
+			return $this->resolveProvider($block->provider)->load($block);
 		});
 	}
 
@@ -68,7 +82,7 @@ class Blocks{
 	{
 		$out = [];
 		foreach(Block::all() as $block){
-			$instance = $block->provider->class::load($block);
+			$instance = $this->resolveProvider($block->provider)->load($block);
 			$out[$instance::getBlockSection()][] = $instance;
 		}
 		return $out;
