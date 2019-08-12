@@ -1,0 +1,19 @@
+{
+    "name": "Block",
+    "alias": "block",
+    "description": "",
+    "keywords": [],
+    "core": 1,
+    "order": 2,
+    "providers": [
+        "Pingu\\Block\\Providers\\BlockServiceProvider"
+    ],
+    "aliases": {
+        "Blocks": "Pingu\\Block\\Facades\\Blocks",
+        "BlockCreator": "Pingu\\Block\\Facades\\BlockCreator"
+    },
+    "files": [
+        "functions.php"
+    ],
+    "requires": []
+}
