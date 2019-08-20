@@ -15,10 +15,11 @@ class AjaxBlockController extends BaseController
 
 	public function edit(BaseModel $block):array
 	{
-		$form = new FormModel(
-			['url' => Block::transformUri('update', [$block], config('core.ajaxPrefix')), 'method' => 'put'], 
+		$form = new ModelForm(
+			['url' => Block::makeUri('update', [$block], ajaxPrefix()), 'method' => 'put'], 
 			['submit' => ['Save'], 'view' => 'forms.modal', 'title' => 'Edit a ' . $block->instance->name . ' block'], 
-			$block->instance
+			$block->instance,
+			true
 		);
 		$form->end();
 		return ['form' => $form->renderAsString()];

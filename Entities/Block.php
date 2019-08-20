@@ -3,6 +3,7 @@
 namespace Pingu\Block\Entities;
 
 use Pingu\Core\Entities\BaseModel;
+use Pingu\Core\Traits\Models\HasBasicCrudUris;
 use Pingu\Forms\Contracts\Models\FormableContract;
 use Pingu\Forms\Traits\Models\Formable;
 use Pingu\Page\Entities\Page;
@@ -10,6 +11,8 @@ use Pingu\Page\Entities\PageRegion;
 
 class Block extends BaseModel
 {
+    use HasBasicCrudUris;
+
     protected $fillable = ['provider', 'data'];
 
     protected $with = ['provider'];
@@ -33,6 +36,11 @@ class Block extends BaseModel
     public function provider()
     {
     	return $this->belongsTo(BlockProvider::class);
+    }
+
+    public static function createUri()
+    {
+        return static::routeSlugs().'/create/{slug}';
     }
 
     public function toArray()

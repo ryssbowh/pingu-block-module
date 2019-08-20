@@ -6,10 +6,10 @@ use Pingu\Block\BlockProviders\DbBlockProvider;
 use Pingu\Block\Entities\Block;
 use Pingu\Core\Http\Controllers\BaseController;
 use Pingu\Forms\Support\ModelForm;
+use Pingu\Page\Entities\Page;
 
 class AdminBlockController extends BaseController
 {
-
 	/**
 	 * Creates a form to add a block
 	 * 
@@ -20,9 +20,10 @@ class AdminBlockController extends BaseController
 	{
 		$blockModel = \BlockCreator::getModel($blockSlug);
 		$form = new ModelForm(
-			['url' => \BlockCreator::transformUri('store', $blockSlug, config('core.adminPrefix'))],
+			['url' => \BlockCreator::makeUri('store', $blockSlug, adminPrefix())],
 			'POST',
-			new $blockModel
+			new $blockModel,
+			false
 		);
 		$form->considerGet(['redirect']);
 		$form->addSubmit();
@@ -45,7 +46,7 @@ class AdminBlockController extends BaseController
 		$modelStr = \BlockCreator::getModel($blockSlug);
 		$model = new $modelStr;
 
-		$validated = $model->validateForm($post, $model->getAddFormFields(), false);
+		$validated = $model->validateRequest($this->request, $model->getAddFormFields());
 
 		$model->formFill($validated)->save();
 
