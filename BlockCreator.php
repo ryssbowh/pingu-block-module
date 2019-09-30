@@ -18,7 +18,7 @@ class BlockCreator
      * @param  string      $model
      * @param  string|null $name
      */
-    public function registerModel(string $model)
+    public function registerModelSlug(string $model)
     {
         $reflection = new \ReflectionClass($model);
         if(!$reflection->implementsInterface(CreatableBlockContract::class)){

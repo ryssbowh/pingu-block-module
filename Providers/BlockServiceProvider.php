@@ -20,7 +20,6 @@ class BlockServiceProvider extends ModuleServiceProvider
      */
     public function boot()
     {
-        $this->registerModelSlugs(__DIR__.'/../'.$this->modelFolder);
         $this->loadViewsFrom(__DIR__ . '/../Resources/views', 'block');
         $this->registerCreatorModels();
     }
@@ -30,7 +29,7 @@ class BlockServiceProvider extends ModuleServiceProvider
      */
     public function registerCreatorModels()
     {
-        \BlockCreator::registerModel(BlockText::class);
+        // \BlockCreator::registerModelSlug(BlockText::class);
     }
 
     /**

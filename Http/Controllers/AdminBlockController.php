@@ -46,7 +46,7 @@ class AdminBlockController extends BaseController
 		$modelStr = \BlockCreator::getModel($blockSlug);
 		$model = new $modelStr;
 
-		$validated = $model->validateRequest($this->request, $model->getAddFormFields());
+		$validated = $model->validateStoreRequest($this->request);
 
 		$model->formFill($validated)->save();
 
