@@ -4,14 +4,14 @@
     "description": "Block API",
     "keywords": [],
     "core": 1,
-    "order": 2,
+    "order": -96,
     "providers": [
         "Pingu\\Block\\Providers\\BlockServiceProvider",
         "Pingu\\Block\\Providers\\ConsoleServiceProvider"
     ],
     "aliases": {
         "Blocks": "Pingu\\Block\\Facades\\Blocks",
-        "BlockCreator": "Pingu\\Block\\Facades\\BlockCreator"
+        "ClassBlockProvider": "Pingu\\Block\\Facades\\ClassBlockProvider"
     },
     "files": [
         "functions.php"

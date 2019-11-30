@@ -13,29 +13,14 @@ class M2019_08_10_062704176772_InstallBlock extends Migration
      */
     public function up()
     {
-        Schema::create('block_providers', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('class');
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
         Schema::create('blocks', function (Blueprint $table) {
             $table->increments('id');
             $table->json('data');
-            $table->integer('provider_id')->unsigned()->index();
-            $table->foreign('provider_id')->references('id')->on('block_providers')->onDelete('cascade');
+            $table->boolean('active');
+            $table->string('provider')->index();
+            $table->boolean('deletable')->default(1);
+            $table->boolean('editable')->default(1);
             $table->timestamps();
-            $table->softDeletes();
-        });
-
-        Schema::create('block_texts', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->text('text');
-            $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -46,9 +31,6 @@ class M2019_08_10_062704176772_InstallBlock extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('block_texts');
-        Schema::dropIfExists('block_creators');
         Schema::dropIfExists('blocks');
-        Schema::dropIfExists('block_providers');
     }
 }

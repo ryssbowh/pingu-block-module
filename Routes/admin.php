@@ -1,7 +1,5 @@
 <?php
 
-use Pingu\Block\Entities\Block;
-
 /*
 |--------------------------------------------------------------------------
 | Admin Web Routes
@@ -13,17 +11,6 @@ use Pingu\Block\Entities\Block;
 |
 */
 
-/**
- * Block creation
- */
-Route::get(Block::createUri(), ['uses' => 'AdminBlockController@create'])
-	->middleware('can:create blocks');
-Route::post(\BlockCreator::storeUri(), ['uses' => 'AdminBlockController@store'])
-	->middleware('can:create blocks');
-
-/**
- * Blocks
- */
-
-Route::get(Block::getUri('index'), ['uses' => 'AdminBlockController@index'])
-	->middleware('can:view page blocks');
+Route::get('blocks', ['uses' => 'BlocksAdminController@index'])
+    ->middleware('perm:manage blocks')
+    ->name('block.admin.blocks');

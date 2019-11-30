@@ -2,53 +2,104 @@
 
 namespace Pingu\Block\Entities;
 
+use Pingu\Block\Entities\BlockProvider;
+use Pingu\Block\Entities\Policies\BlockPolicy;
+use Pingu\Block\Events\BlockCacheChanged;
 use Pingu\Core\Entities\BaseModel;
-use Pingu\Core\Traits\Models\HasBasicCrudUris;
-use Pingu\Forms\Contracts\Models\FormableContract;
-use Pingu\Forms\Traits\Models\Formable;
+use Pingu\Entity\Entities\Entity;
 use Pingu\Page\Entities\Page;
 use Pingu\Page\Entities\PageRegion;
 
-class Block extends BaseModel
+class Block extends Entity
 {
-    use HasBasicCrudUris;
+    protected $fillable = ['provider', 'data', 'active'];
 
-    protected $fillable = ['provider', 'data'];
-
-    protected $with = ['provider'];
-
-    protected $visible = ['id', 'provider'];
+    protected $visible = ['id', 'provider', 'active'];
 
     protected $casts = [
-        'data' => 'json'
+        'data' => 'json',
+        'active' => 'bool'
     ];
 
-    public function instance()
+    /**
+     * @var BlockContract
+     */
+    protected $instance;
+
+    /**
+     * @inheritDoc
+     */
+    public static function boot()
     {
-        return \Blocks::load($this);
+        parent::boot();
+
+        static::saved(function () {
+            event(new BlockCacheChanged());
+        });
     }
 
-    public function regions()
+    /**
+     * @inheritDoc
+     */
+    public function getPolicy(): string
     {
-    	return $this->hasMany(PageRegion::class);
+        return BlockPolicy::class;
     }
 
-    public function provider()
+    /**
+     * Resolve the provider of this block
+     * 
+     * @return BlockProvider
+     */
+    public function resolveProvider(): BlockProvider
     {
-    	return $this->belongsTo(BlockProvider::class);
+        return \Blocks::resolveProvider($this->provider);
     }
 
-    public static function createUri()
+    /**
+     * @inheritDoc
+     */
+    public function refresh()
     {
-        return static::routeSlugs().'/create/{slug}';
+        parent::refresh();
+        $this->instance = null;
     }
 
+    /**
+     * Get the BlockContract instance for this block
+     * 
+     * @return BlockContract
+     */
+    public function instance(): BlockContract
+    {
+        if (is_null($this->instance)) {
+            $this->instance = $this->resolveProvider()->load($this);
+        }
+        return $this->instance;
+    }
+
+    /**
+     * Data getter
+     * 
+     * @param string  $name
+     * 
+     * @return mixed
+     */
+    public function getData(string $name)
+    {
+        return $this->data[$name] ?? null;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function toArray()
     {
         $array = parent::toArray();
-        $instance = $this->instance();
-        $array['name'] = $instance->getBlockName();
-        $array['section'] = $instance->getBlockSection();
+        if ($this->provider) {
+            $array['provider'] = $this->provider;
+            $array['instance'] = $this->instance()->toArray();
+        }
         return $array;
     }
 }

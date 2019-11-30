@@ -30,7 +30,7 @@ class MakeBlockCommand extends Command
      */
     protected $files;
 
-    protected $stub = __DIR__ . '/../stubs/block.stub'; 
+    protected $stub = __DIR__ . '/stubs/block.stub'; 
 
     /**
      * Execute the console command.

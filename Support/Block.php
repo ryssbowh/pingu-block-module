@@ -1,85 +1,65 @@
-<?php
+<?php 
 
 namespace Pingu\Block\Support;
 
 use Illuminate\Support\Str;
+use Pingu\Block\Contracts\BlockProviderContract;
 use Pingu\Block\Entities\Block as BlockModel;
 
 trait Block
 {
-    protected $block;
-
-    protected $provider;
+    protected $model;
 
     /**
-     * Sets the model block
+     * Constructor
      * 
-     * @param BlockModel $block
+     * @param BlockModel|null $block
      */
-    public function setBlock(BlockModel $block)
+    public function __construct(?BlockModel $block = null)
     {
-        $this->block = $block;
+        $this->model = $block;
     }
 
     /**
-     * Sets the provider
-     * 
-     * @param BlockProvider $provider
+     * @inheritDoc
      */
-    public function setProvider(BlockProvider $provider)
-    {
-        $this->provider = $provider;
-    }
-
-    /**
-     * get block
-     * 
-     * @return BlockModel
-     */
-    public function getBlock()
+    public function blockModel(): BlockModel
     {
         return $this->block;
     }
 
     /**
-     * get provider
-     * 
-     * @return BlockProvider
+     * @inheritDoc
      */
-    public function getProvider()
+    public function machineName(): string
     {
-        return $this->provider;
+        return class_machine_name($this);
     }
 
     /**
-     * Get the view name for this block
-     * 
-     * @return string
+     * @inheritDoc
      */
-    protected function getViewName()
+    public function fullMachineName(): string
     {
-        return 'blocks.'.$this->getProvider()->getName().'.'.Str::kebab(class_basename($this));
+        return $this->provider().'.'.$this->machineName();
     }
 
     /**
-     * Define extra variables for the view here
-     * 
-     * @return array
+     * @inheritDoc
      */
-    protected function getViewVariables()
+    public function resolveProvider(): BlockProviderContract
     {
-        return [];
+        return  \Blocks::resolveProvider($this->provider());
     }
 
     /**
-     * Renders this block
-     * 
-     * @return view
+     * @inheritDoc
      */
-    public function render()
+    public function toArray()
     {
-        $with = array_merge($this->getViewVariables(), ['block' => $this]);
-        return view($this->getViewName())->with($with);
+        return [
+            'title' => $this->title(),
+            'hasOptions' => $this->hasOptions()
+        ];
     }
-
 }

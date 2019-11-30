@@ -2,50 +2,88 @@
 
 namespace Pingu\Block\Contracts;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Pingu\Block\Entities\Block;
 use Pingu\Block\Support\BlockProvider;
+use Pingu\Forms\Support\Form;
 
-interface BlockContract
+interface BlockContract extends Arrayable
 {
-	/**
-	 * Renders this block
-	 * 
-	 * @return view
-	 */
-	public function render();
+    /**
+     * Renders this block
+     * 
+     * @return view
+     */
+    public function render();
 
-	/**
-	 * Get this block section
-	 * 
-	 * @return string
-	 */
-	public static function getBlockSection();
+    /**
+     * Does this block define options
+     * 
+     * @return boolean
+     */
+    public function hasOptions(): bool;
 
-	/**
-	 * get this block name
-	 * 
-	 * @return string
-	 */
-	public function getBlockName();
-		
-	/**
-	 * Get this block model
-	 * 
-	 * @return Block
-	 */
-	public function getBlock();
+    /**
+     * Full machine name, eg {providerName}.{blockName}
+     * 
+     * @return string
+     */
+    public function fullMachineName(): string;
 
-	/**
-	 * is this block editable
-	 * 
-	 * @return bool
-	 */
-	public function blockIsEditable();
+    /**
+     * Machine name for this block
+     * 
+     * @return string
+     */
+    public function machineName(): string;
 
-	/**
-	 * Get this block's provider
-	 * @return BlockProvider
-	 */
-	public function getProvider();
+    /**
+     * Title describing this block
+     * 
+     * @return string
+     */
+    public function title(): string;
+
+    /**
+     * Simple name for this block
+     * 
+     * @return string
+     */
+    public function name(): string;
+
+    /**
+     * Get this block section
+     * 
+     * @return string
+     */
+    public function section(): string;
+        
+    /**
+     * Get this block model
+     * 
+     * @return Block
+     */
+    public function blockModel(): Block;
+
+    /**
+     * Get this block's provider
+     * 
+     * @return BlockProviderContract
+     */
+    public function resolveProvider(): BlockProviderContract;
+
+    /**
+     * Get this block provider name
+     * 
+     * @return string
+     */
+    public function provider(): string;
+
+    /**
+     * Default data to be saved for this model
+     * 
+     * @return array
+     */
+    public function getDefaultData(): array;
 
 }

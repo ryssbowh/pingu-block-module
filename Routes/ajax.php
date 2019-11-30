@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Ajax Web Routes
@@ -10,8 +9,3 @@
 | contains the "ajax" middleware group.
 |
 */
-
-// Route::get(Block::getAjaxUri('edit'), ['uses' => 'AjaxBlockController@edit'])
-// 	->middleware('can:manage pages blocks');
-// Route::put(Block::getAjaxUri('update'), ['uses' => 'AjaxBlockController@update'])
-	// ->middleware('can:manage pages blocks');

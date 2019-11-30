@@ -19,30 +19,7 @@ class S2019_08_10_062709043677_InstallBlock extends MigratableSeeder
      */
     public function run(): void
     {
-        Permission::create(['name' => 'create blocks', 'section' => 'Block']);
-
-        $block = BlockText::create([
-            'name' => 'text',
-            'text' => 'My first block'
-        ]);
-
-        $p1 = BlockProvider::create([
-            'name' => 'Database',
-            'class' => DbBlockProvider::class
-        ]);
-
-        $p2 = BlockProvider::create([
-            'name' => 'Class',
-            'class' => ClassBlockProvider::class
-        ]);
-
-        $block = new Block([
-            'data' => [
-                'entity' => BlockText::class,
-                'id' => $block->id
-            ]
-        ]);
-        $block->provider()->associate($p1)->save();
+        Permission::create(['name' => 'manage blocks', 'section' => 'Block']);
     }
 
     /**

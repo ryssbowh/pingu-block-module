@@ -7,6 +7,14 @@ var name = dir.split(path.sep).pop();
 var assetPath = __dirname + '/Resources/assets';
 var publicPath = 'module-assets/';
 
+mix.webpackConfig({
+  resolve: {
+    alias: {
+      'Block': path.resolve(assetPath + '/js/components', './Block'),
+    }
+  }
+});
+
 //Javascript
 mix.js(assetPath + '/js/app.js', publicPath + name+'.js');
 

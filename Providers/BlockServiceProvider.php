@@ -3,33 +3,46 @@
 namespace Pingu\Block\Providers;
 
 use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Routing\Router;
 use Pingu\Block\BlockCreator;
 use Pingu\Block\BlockProviders\ClassBlockProvider;
 use Pingu\Block\BlockProviders\DbBlockProvider;
 use Pingu\Block\Blocks;
+use Pingu\Block\Blocks\Test;
 use Pingu\Block\Entities\Block;
 use Pingu\Block\Entities\BlockText;
+use Pingu\Block\Http\Middleware\BlockHasOptions;
 use Pingu\Core\Support\ModuleServiceProvider;
 
 class BlockServiceProvider extends ModuleServiceProvider
 {
+    protected $entities = [
+        Block::class
+    ];
     /**
      * Boot the application events.
      *
      * @return void
      */
-    public function boot()
+    public function boot(Router $router)
     {
+        $this->registerConfig();
+        $router->aliasMiddleware('blockHasOptions', BlockHasOptions::class);
         $this->loadViewsFrom(__DIR__ . '/../Resources/views', 'block');
-        $this->registerCreatorModels();
-    }
+        \ClassBlockProvider::registerBlock(Test::class);
+        \Route::bind('block_name', function ($value, $route) {
+            return \Blocks::resolveBlock($value);
+        });
 
-    /**
-     * Registers models that can be used through the DbBlockProvider
-     */
-    public function registerCreatorModels()
-    {
-        // \BlockCreator::registerModelSlug(BlockText::class);
+        \JsConfig::setMany([
+            'block.uris.create' => Block::uris()->get('create', ajaxPrefix()),
+            'block.uris.store' => Block::uris()->get('store', ajaxPrefix()),
+            'block.uris.delete' => Block::uris()->get('delete', ajaxPrefix()),
+            'block.uris.edit' => Block::uris()->get('edit', ajaxPrefix()),
+            'block.uris.update' => Block::uris()->get('update', ajaxPrefix()),
+        ]);
+
+        \Asset::container('modules')->add('block-js', 'module-assets/Block.js');
     }
 
     /**
@@ -39,17 +52,9 @@ class BlockServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
+        $this->registerEntities($this->entities);
         $this->app->singleton('blocks', Blocks::class);
-        $this->app->singleton('block', Block::class);
-        $this->app->singleton('block.creator', function($app){
-            return new BlockCreator;
-        });
-        $this->app->singleton(DbBlockProvider::class, function($app){
-            return new DbBlockProvider;
-        });
-        $this->app->singleton(ClassBlockProvider::class, function($app){
-            return new ClassBlockProvider;
-        });
+        \Blocks::registerProvider(ClassBlockProvider::class);
         $this->app->register(RouteServiceProvider::class);
     }
 
@@ -67,5 +72,17 @@ class BlockServiceProvider extends ModuleServiceProvider
         } else {
             $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'block');
         }
+    }
+
+    /**
+     * Register config.
+     *
+     * @return void
+     */
+    protected function registerConfig()
+    {
+        $this->mergeConfigFrom(
+            __DIR__.'/../Config/config.php', 'block'
+        );
     }
 }
