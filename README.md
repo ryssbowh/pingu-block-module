@@ -9,51 +9,24 @@ When working with a block model you'll need to call $block->instance() to get th
 Or you can use the facade `\Blocks::load($id)` to load a block instance (`\Blocks::load(Block $block)` also works).
 
 Each block instance define a `render` method that you can override to load a specific view.
+Blocks that define options must implements `BlockWithOptionsContract`.
 
-To access the block model in a block instance, call `$instance->getBlock()`.
-To access the provider (that extends `Pingu\Block\Support\BlockProvider`) in a block instance, call `$instance->getProvider()`.
-To access the model provider in a block model, call `$block->provider`
+To access the block model in a block instance, call `$instance->blockModel()`.
+To access the provider (that implements `BlockProviderContract`) in a block instance, call `$instance->resolveProvider()`.
 
 ## Providers
 
-Each block is provided by a provider that extends `Pingu\Block\Support\BlockProvider`. This package provides with two providers `ClassBlockProvider` and `DbBlockProvider`
+Each block is provided by a provider that implements `BlockProviderContract`. This package provides with one provider `ClassBlockProvider` on which all class defined block must be registered.
 
-To add a new provider, add a line in the block_providers table eg :
-```
-BlockProvider::create([
-	'class' => MyNewProvider::class,
-	'name' => 'something'
-]);
-```
+New providers must be registered on the Block facade : `\Blocks::registerProvider(ClassBlockProvider::class);`
 
-And you need to register it in the container (deferred preferably) :
+Providers must implements the method `getRegisteredBlocks` which tells the application which blocks are available through this provider.
 
-`$this->app->singleton(MyNewProvider::class, function($app){
-    return new MyNewProvider;
-});`
-
-### ClassBlockProvider
+### ClassBlockProvider block provider
 
 Allows developers to define classes that provide blocks.
 Such a class would implement `BlockContract` and optionnaly use the Trait `ClassBlock`.
-To make the block available in pages you'll need to add a line in the block table referencing your class eg:
-```
-$p = BlockProvider::findByClass(ClassBlockProvider::class);
-
-$block = new Block([
-    'data' => [
-        'class' => MyNewBlockClass::class,
-    ]
-]);
-$block->provider()->associate($p)->save();
-```
-
-### DbBlockProvider
-
-Allows user to create blocks using models defined by developers.
-Each of those models is a normal model that implements `CreatableBlockContract`, they have a block slug to represent them is urls (for creation/edition).
-To create a new block model, you'll need to register it through the creator facade : `\BlockCreator::registerModel(MyModel::class)`, the facade will check that your block slug is not alreay used.
-After that define your fields as usual in your model.
+To make your block available you'll need to register it in the `ClassBlockProvider` facade : `\ClassBlockProvider::registerBlock(MyBlock::class);`
 
 ### Commands
 
