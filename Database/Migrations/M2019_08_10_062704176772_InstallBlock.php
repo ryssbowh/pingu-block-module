@@ -18,8 +18,8 @@ class M2019_08_10_062704176772_InstallBlock extends Migration
             $table->json('data');
             $table->boolean('active');
             $table->string('provider')->index();
-            $table->boolean('deletable')->default(1);
-            $table->boolean('editable')->default(1);
+            $table->unsignedInteger('permission_id')->nullable();
+            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('set null');
             $table->timestamps();
         });
     }

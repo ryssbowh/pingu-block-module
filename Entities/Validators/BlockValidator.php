@@ -13,7 +13,8 @@ class BlockValidator extends BaseFieldsValidator
     protected function rules(): array
     {
         return [
-
+            'active' => 'boolean',
+            'permission' => 'sometimes|integer|exists:permissions,id'
         ];
     }
     

@@ -5,6 +5,8 @@ namespace Pingu\Block\Support;
 use Illuminate\Support\Str;
 use Pingu\Block\Contracts\BlockProviderContract;
 use Pingu\Block\Entities\Block as BlockModel;
+use Pingu\Block\Forms\BlockOptionsForm;
+use Pingu\Forms\Support\Form;
 
 trait Block
 {
@@ -55,11 +57,51 @@ trait Block
     /**
      * @inheritDoc
      */
+    public function createOptionsForm(): Form
+    {
+        return new BlockOptionsForm($this);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function editOptionsForm(BlockModel $block): Form
+    {
+        return new BlockOptionsForm($this, $block);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOptionsValidationMessages(): array
+    {
+        return [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOptionsValidationRules(): array
+    {
+        return [];
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function toArray()
     {
         return [
             'title' => $this->title(),
             'hasOptions' => $this->hasOptions()
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getDefaultData(): array
+    {
+        return [];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Pingu\Block\Entities;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Pingu\Block\Contracts\BlockContract;
 use Pingu\Block\Contracts\BlockProviderContract;
 use Pingu\Block\Entities\Policies\BlockPolicy;
@@ -10,6 +11,7 @@ use Pingu\Core\Entities\BaseModel;
 use Pingu\Entity\Entities\Entity;
 use Pingu\Page\Entities\Page;
 use Pingu\Page\Entities\PageRegion;
+use Pingu\Permissions\Entities\Permission;
 
 class Block extends Entity
 {
@@ -26,6 +28,16 @@ class Block extends Entity
      * @var BlockContract
      */
     protected $instance;
+
+    /**
+     * Permission relationship
+     * 
+     * @return BelongsTo
+     */
+    public function permission()
+    {
+        return $this->belongsTo(Permission::class);
+    }
 
     /**
      * @inheritDoc

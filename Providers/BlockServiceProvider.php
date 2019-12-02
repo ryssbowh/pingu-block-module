@@ -11,7 +11,6 @@ use Pingu\Block\Blocks;
 use Pingu\Block\Blocks\Test;
 use Pingu\Block\Entities\Block;
 use Pingu\Block\Entities\BlockText;
-use Pingu\Block\Http\Middleware\BlockHasOptions;
 use Pingu\Core\Support\ModuleServiceProvider;
 
 class BlockServiceProvider extends ModuleServiceProvider
@@ -27,7 +26,6 @@ class BlockServiceProvider extends ModuleServiceProvider
     public function boot(Router $router)
     {
         $this->registerConfig();
-        $router->aliasMiddleware('blockHasOptions', BlockHasOptions::class);
         $this->loadViewsFrom(__DIR__ . '/../Resources/views', 'block');
         \ClassBlockProvider::registerBlock(Test::class);
         \Route::bind('block_name', function ($value, $route) {

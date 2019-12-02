@@ -10,18 +10,25 @@ use Pingu\Forms\Support\Form;
 interface BlockContract extends Arrayable
 {
     /**
+     * Get the form to create options
+     * 
+     * @return Form
+     */
+    public function createOptionsForm(): Form;
+
+    /**
+     * Get the form to edit options
+     * 
+     * @return Form
+     */
+    public function editOptionsForm(Block $block): Form;
+    
+    /**
      * Renders this block
      * 
      * @return view
      */
     public function render();
-
-    /**
-     * Does this block define options
-     * 
-     * @return boolean
-     */
-    public function hasOptions(): bool;
 
     /**
      * Full machine name, eg {providerName}.{blockName}
@@ -85,5 +92,9 @@ interface BlockContract extends Arrayable
      * @return array
      */
     public function getDefaultData(): array;
+
+    public function getOptionsValidationRules(): array;
+
+    public function getOptionsValidationMessages(): array;
 
 }

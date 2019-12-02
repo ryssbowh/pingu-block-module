@@ -3,7 +3,9 @@
 namespace Pingu\Block\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Pingu\Block\Contracts\BlockContract;
 use Pingu\Block\Entities\Block;
+use Pingu\Core\Support\Arr;
 
 trait BlockController
 {   
@@ -16,8 +18,6 @@ trait BlockController
     {
         $block = $this->routeParameter('block_name');
         $form = $block->createOptionsForm();
-        $form->addElements((new Block)->fields()->toFormElements());
-        $form->moveElementUp('active', 1);
         return $this->afterCreateOptionsFormCreated($form);
     }
 
@@ -57,17 +57,27 @@ trait BlockController
      */
     public function update(Request $request, Block $block)
     {
-        $data = $block->instance()->validateOptionsRequest($request);
-        $block->data = $data;
-        $block->save();
+        list($attributes, $data) = $this->validateOptionsRequest($request, $block->instance());
+        $attributes['data'] = $data;
+        $block->saveWithRelations($attributes);
         $block->refresh();
         return $this->afterSuccessfullUpdate($block);
     }
 
+    public function validateOptionsRequest(Request $request, BlockContract $block): array
+    {
+        $modelValidated = (new Block)->validator()->validateRequest($request);
+
+        $rules = $block->getOptionsValidationRules();
+        $messages = $block->getOptionsValidationMessages();
+        $validator = \Validator::make($request->post(), $rules, $messages);
+        $validator->validate();
+        $blockValidated = $validator->validated();
+        return [$modelValidated, array_merge($block->getDefaultData(), $blockValidated)];
+    }
+
     /**
      * Store request.
-     * If the block doesn't define options, the data will de defaulted,
-     * otherwise the request will be validated
      * 
      * @param Request $request
      * 
@@ -76,21 +86,11 @@ trait BlockController
     public function store(Request $request)
     {
         $block = $this->routeParameter('block_name');
-        if (!$block->hasOptions()) {
-            $attributes = [
-                'active' => 0,
-                'provider' => $block->provider(),
-                'data' => $block->getDefaultData()
-            ];
-        } else {
-            $data = $block->validateOptionsRequest($request);
-            $attributes = [
-                'data' => $data,
-                'active' => $request->post('active', false),
-                'provider' => $block->provider()
-            ];
-        }
-        $blockModel = Block::create($attributes);
+        list($attributes, $data) = $this->validateOptionsRequest($request, $block);
+        $blockModel = new Block;
+        $blockModel->provider = $block->provider();
+        $blockModel->data = $data;
+        $blockModel->saveWithRelations($attributes);
         return $this->afterSuccessfullStore($blockModel);
     }
 }
