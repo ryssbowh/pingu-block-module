@@ -44,7 +44,7 @@ class ClassBlockProvider implements BlockProviderContract
             throw ClassBlockProviderException::registered($class);
         }
         $this->blocks['class.'.$class->machineName()] = $class;
-        \Blocks::emptyCache();
+        \Blocks::forgetCache();
     }
 
     /**

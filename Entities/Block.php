@@ -2,7 +2,8 @@
 
 namespace Pingu\Block\Entities;
 
-use Pingu\Block\Entities\BlockProvider;
+use Pingu\Block\Contracts\BlockContract;
+use Pingu\Block\Contracts\BlockProviderContract;
 use Pingu\Block\Entities\Policies\BlockPolicy;
 use Pingu\Block\Events\BlockCacheChanged;
 use Pingu\Core\Entities\BaseModel;
@@ -51,7 +52,7 @@ class Block extends Entity
      * 
      * @return BlockProvider
      */
-    public function resolveProvider(): BlockProvider
+    public function resolveProvider(): BlockProviderContract
     {
         return \Blocks::resolveProvider($this->provider);
     }

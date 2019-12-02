@@ -57,7 +57,7 @@ class Blocks
     public function registeredBlocks(): array
     {
         if (!config('block.useCache')) {
-            $this->emptyCache();
+            $this->forgetCache();
         }
         $_this = $this;
         return \ArrayCache::rememberForever($this->registeredCacheKey, function () use ($_this) {
@@ -79,7 +79,7 @@ class Blocks
         return $out;
     }
 
-    public function emptyCache()
+    public function forgetCache()
     {
         \ArrayCache::forget('block.blocks');
     }
@@ -133,7 +133,7 @@ class Blocks
     public function all()
     {
         if (!config('block.useCache')) {
-            $this->emptyCache();
+            $this->forgetCache();
         }
         return \ArrayCache::rememberForever($this->modelCacheKey, function () {
             return Block::get()->map(function ($block) {

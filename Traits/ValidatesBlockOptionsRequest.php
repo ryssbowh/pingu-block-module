@@ -28,7 +28,7 @@ trait ValidatesBlockOptionsRequest
      * 
      * @return array
      */
-    protected abstract function getOptionsValidationRules(): array();
+    protected abstract function getOptionsValidationRules(): array;
 
     /**
      * @inheritDoc

@@ -3,6 +3,7 @@
 namespace Pingu\Block\Contracts;
 
 use Illuminate\Http\Request;
+use Pingu\Block\Entities\Block;
 use Pingu\Forms\Support\Form;
 
 interface BlockWithOptionsContract extends BlockContract
