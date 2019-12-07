@@ -30,16 +30,6 @@ class Block extends Entity
     protected $instance;
 
     /**
-     * Permission relationship
-     * 
-     * @return BelongsTo
-     */
-    public function permission()
-    {
-        return $this->belongsTo(Permission::class);
-    }
-
-    /**
      * @inheritDoc
      */
     public static function boot()
@@ -49,6 +39,22 @@ class Block extends Entity
         static::saved(function () {
             event(new BlockCacheChanged());
         });
+    }
+
+    public function getPermissionAttribute()
+    {
+        $value = $this->attributes['permission_id'];
+        return $value ? \Permissions::getById($value) : null;
+    }
+
+    /**
+     * Permission relationship
+     * 
+     * @return BelongsTo
+     */
+    public function permission()
+    {
+        return $this->belongsTo(Permission::class);
     }
 
     /**

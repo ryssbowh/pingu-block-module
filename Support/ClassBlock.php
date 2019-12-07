@@ -2,20 +2,28 @@
 
 namespace Pingu\Block\Support;
 
+use Pingu\Block\Contracts\BlockContract;
 use Pingu\Block\Contracts\BlockProviderContract;
+use Pingu\Core\Traits\RendersWithSuggestions;
 
-trait ClassBlock
+abstract class ClassBlock implements BlockContract
 {
-    use Block;
+    use Block, RendersWithSuggestions;
 
-    /**
-     * @inheritDoc
-     */
-    public function render()
+    public function __construct()
     {
-        return view('blocks.'.$this::machineName())->with([
-            'block' => $this
+        $this->addViewSuggestions([
+            'blocks.'.$this->machineName(),
+            'blocks.block',
+            'block::block'
         ]);
+    }
+
+    protected function getViewData(): array
+    {
+        return [
+            'block' => $this
+        ];
     }
 
     /**

@@ -6,10 +6,8 @@ use Pingu\Block\Contracts\BlockContract;
 use Pingu\Block\Support\ClassBlock;
 use Pingu\Forms\Support\Form;
 
-class Test implements BlockContract
+class Test extends ClassBlock
 {
-    use ClassBlock;
-
     public function section(): string
     {
         return 'Test';
