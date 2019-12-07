@@ -12,11 +12,13 @@ class BlocksAdminController extends BaseController
         if (is_null($layout)) {
             $layout = array_keys($layouts)[0];
         }
-        return view('block::index')->with([
+        return view('block::index')->with(
+            [
             'layout' => $layout,
             'regions' => \Theme::front()->getRegions($layout);
             'blocks' => \Blocks::registeredBlocksBySection(),
             'blockModel' => Block::class,
-        ]);
+            ]
+        );
     }
 }

@@ -36,9 +36,11 @@ class Block extends Entity
     {
         parent::boot();
 
-        static::saved(function () {
-            event(new BlockCacheChanged());
-        });
+        static::saved(
+            function () {
+                event(new BlockCacheChanged());
+            }
+        );
     }
 
     public function getPermissionAttribute()
@@ -100,7 +102,7 @@ class Block extends Entity
     /**
      * Data getter
      * 
-     * @param string  $name
+     * @param string $name
      * 
      * @return mixed
      */

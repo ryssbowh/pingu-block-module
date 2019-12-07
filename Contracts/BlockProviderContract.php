@@ -25,7 +25,7 @@ interface BlockProviderContract
     /**
      * Load a block model into a BlockContract instance
      * 
-     * @param Block  $block
+     * @param Block $block
      * 
      * @return BlockContract
      */

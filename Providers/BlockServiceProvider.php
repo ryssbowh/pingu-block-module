@@ -28,17 +28,21 @@ class BlockServiceProvider extends ModuleServiceProvider
         $this->registerConfig();
         $this->loadViewsFrom(__DIR__ . '/../Resources/views', 'block');
         \ClassBlockProvider::registerBlock(Test::class);
-        \Route::bind('block_name', function ($value, $route) {
-            return \Blocks::resolveBlock($value);
-        });
+        \Route::bind(
+            'block_name', function ($value, $route) {
+                return \Blocks::resolveBlock($value);
+            }
+        );
 
-        \JsConfig::setMany([
+        \JsConfig::setMany(
+            [
             'block.uris.create' => Block::uris()->get('create', ajaxPrefix()),
             'block.uris.store' => Block::uris()->get('store', ajaxPrefix()),
             'block.uris.delete' => Block::uris()->get('delete', ajaxPrefix()),
             'block.uris.edit' => Block::uris()->get('edit', ajaxPrefix()),
             'block.uris.update' => Block::uris()->get('update', ajaxPrefix()),
-        ]);
+            ]
+        );
 
         \Asset::container('modules')->add('block-js', 'module-assets/Block.js');
     }

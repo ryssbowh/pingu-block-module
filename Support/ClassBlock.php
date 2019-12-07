@@ -12,11 +12,13 @@ abstract class ClassBlock implements BlockContract
 
     public function __construct()
     {
-        $this->addViewSuggestions([
+        $this->addViewSuggestions(
+            [
             'blocks.'.$this->machineName(),
             'blocks.block',
             'block::block'
-        ]);
+            ]
+        );
     }
 
     protected function getViewData(): array

@@ -33,7 +33,8 @@ class ModuleMakeBlockCommand extends MakeBlockCommand
         parent::handle();
     }
 
-    public function getNamespace(){
+    public function getNamespace()
+    {
 
         $namespace = $this->laravel['modules']->config('namespace');
 

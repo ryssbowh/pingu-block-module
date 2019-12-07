@@ -8,7 +8,8 @@ use Pingu\Block\Entities\Block;
 use Pingu\Core\Support\Arr;
 
 trait BlockController
-{   
+{
+   
     /**
      * Create request
      * 
@@ -24,7 +25,7 @@ trait BlockController
     /**
      * Delete request
      * 
-     * @param Block  $block
+     * @param Block $block
      * 
      * @return mixed
      */
@@ -37,7 +38,7 @@ trait BlockController
     /**
      * Edit request
      * 
-     * @param Block  $block
+     * @param Block $block
      * 
      * @return mixed
      */

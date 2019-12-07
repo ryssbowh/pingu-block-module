@@ -12,6 +12,7 @@ class ClassBlockProvider implements BlockProviderContract
 {
     /**
      * Blocks registered in this provider
+     *
      * @var array
      */
     protected $blocks = [];
@@ -35,7 +36,7 @@ class ClassBlockProvider implements BlockProviderContract
     /**
      * Register a new block class
      * 
-     * @param  string|object $class
+     * @param string|object $class
      */
     public function registerBlock($class)
     {   
@@ -50,7 +51,7 @@ class ClassBlockProvider implements BlockProviderContract
     /**
      * Check if a block name is registered
      * 
-     * @param  string  $machineName
+     * @param  string $machineName
      * @return boolean
      */
     public function isRegistered(string $machineName)

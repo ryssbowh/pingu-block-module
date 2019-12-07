@@ -14,11 +14,13 @@ class S2019_08_10_062709043677_InstallBlock extends MigratableSeeder
      */
     public function run(): void
     {
-        Role::find(4)->givePermissionTo([
+        Role::find(4)->givePermissionTo(
+            [
             Permission::create(['name' => 'edit blocks', 'section' => 'Block']);
             Permission::create(['name' => 'delete blocks', 'section' => 'Block']);
             Permission::create(['name' => 'create blocks', 'section' => 'Block']);
-        ]);
+            ]
+        );
     }
 
     /**

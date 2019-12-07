@@ -60,13 +60,15 @@ class Blocks
             $this->forgetCache();
         }
         $_this = $this;
-        return \ArrayCache::rememberForever($this->registeredCacheKey, function () use ($_this) {
-            $out = [];
-            foreach ($_this->registeredProviders() as $provider) {
-                $out = array_merge($out, $provider->getRegisteredBlocks());
+        return \ArrayCache::rememberForever(
+            $this->registeredCacheKey, function () use ($_this) {
+                $out = [];
+                foreach ($_this->registeredProviders() as $provider) {
+                    $out = array_merge($out, $provider->getRegisteredBlocks());
+                }
+                return $out;
             }
-            return $out;
-        });
+        );
     }
 
     public function registeredBlocksBySection()
@@ -87,7 +89,7 @@ class Blocks
     /**
      * Loads and returns one block
      * 
-     * @param  int|Block    $id
+     * @param  int|Block $id
      * @return BlockContract
      */
     public function loadOne($block)
@@ -101,14 +103,18 @@ class Blocks
     /**
      * Loads and returns a collection of Blocks
      * 
-     * @param  array  $ids
+     * @param  array $ids
      * @return Collection
      */
     public function loadMany(array $ids)
     {
-        return collect(array_map(function ($id) {
-            return $this->loadOne($id);
-        }, $ids));
+        return collect(
+            array_map(
+                function ($id) {
+                    return $this->loadOne($id);
+                }, $ids
+            )
+        );
     }
 
     /**
@@ -135,10 +141,14 @@ class Blocks
         if (!config('block.useCache')) {
             $this->forgetCache();
         }
-        return \ArrayCache::rememberForever($this->modelCacheKey, function () {
-            return Block::get()->map(function ($block) {
-                return $block->provider->load($block);
-            });
-        });
+        return \ArrayCache::rememberForever(
+            $this->modelCacheKey, function () {
+                return Block::get()->map(
+                    function ($block) {
+                        return $block->provider->load($block);
+                    }
+                );
+            }
+        );
     }
 }
