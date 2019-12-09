@@ -3,11 +3,11 @@
 namespace Pingu\Block\Entities\Policies;
 
 use Pingu\Block\Entities\Block;
-use Pingu\Core\Support\Policy;
 use Pingu\Entity\Entities\Entity;
+use Pingu\Entity\Support\BaseEntityPolicy;
 use Pingu\User\Entities\User;
 
-class BlockPolicy extends Policy
+class BlockPolicy extends BaseEntityPolicy
 {
     protected function userOrGuest(?User $user)
     {
