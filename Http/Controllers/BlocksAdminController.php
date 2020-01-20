@@ -15,7 +15,7 @@ class BlocksAdminController extends BaseController
         return view('block::index')->with(
             [
             'layout' => $layout,
-            'regions' => \Theme::front()->getRegions($layout);
+            'regions' => \Theme::front()->getRegions($layout),
             'blocks' => \Blocks::registeredBlocksBySection(),
             'blockModel' => Block::class,
             ]
