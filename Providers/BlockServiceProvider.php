@@ -86,5 +86,8 @@ class BlockServiceProvider extends ModuleServiceProvider
         $this->mergeConfigFrom(
             __DIR__.'/../Config/config.php', 'block'
         );
+        $this->publishes([
+            __DIR__.'/../Config/config.php' => config_path('module-block.php')
+        ], 'config');
     }
 }
