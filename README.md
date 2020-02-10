@@ -9,7 +9,7 @@ When working with a block model you'll need to call $block->instance() to get th
 Or you can use the facade `\Blocks::load($id)` to load a block instance (`\Blocks::load(Block $block)` also works).
 
 Each block instance define a `render` method that you can override to load a specific view.
-Blocks that define options must implements `BlockWithOptionsContract`.
+Blocks can have options or not.
 
 To access the block model in a block instance, call `$instance->blockModel()`.
 To access the provider (that implements `BlockProviderContract`) in a block instance, call `$instance->resolveProvider()`.
@@ -27,6 +27,10 @@ Providers must implements the method `getRegisteredBlocks` which tells the appli
 Allows developers to define classes that provide blocks.
 Such a class would implement `BlockContract` and optionnaly use the Trait `ClassBlock`.
 To make your block available you'll need to register it in the `ClassBlockProvider` facade : `\ClassBlockProvider::registerBlock(MyBlock::class);`
+
+### Caching
+
+Registered blocks and database blocks are saved in cache if the config `block.useCache` is true
 
 ### Commands
 

@@ -45,8 +45,8 @@ class Block extends Entity
 
     public function getPermissionAttribute()
     {
-        $value = $this->attributes['permission_id'];
-        return $value ? \Permissions::getById($value) : null;
+        $set = isset($this->attributes['permission_id']) and $this->attributes['permission_id'];
+        return $set ? \Permissions::getById($this->attributes['permission_id']) : null;
     }
 
     /**
