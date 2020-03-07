@@ -11,7 +11,7 @@ mix.webpackConfig(
     {
         resolve: {
             alias: {
-                'Block': path.resolve(assetPath + '/js/components', './Block'),
+                'BlockModule': path.resolve(assetPath + '/js/components', './Block'),
             }
         }
     }

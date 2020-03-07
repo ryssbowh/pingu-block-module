@@ -14,7 +14,7 @@ class BlockAjaxController extends BaseController
     {
         $form->addViewSuggestion('forms.modal')
             ->isAjax();
-        return ['form' => $form->__toString()];
+        return ['html' => $form->__toString()];
     }
 
     public function afterSuccessfullDeletion(Block $block)
@@ -36,6 +36,6 @@ class BlockAjaxController extends BaseController
     {
         $form->addViewSuggestion('forms.modal')
             ->isAjax();
-        return ['form' => $form->__toString()];
+        return ['html' => $form->__toString()];
     }
 }
