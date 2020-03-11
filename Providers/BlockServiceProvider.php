@@ -87,7 +87,7 @@ class BlockServiceProvider extends ModuleServiceProvider
             __DIR__.'/../Config/config.php', 'block'
         );
         $this->publishes([
-            __DIR__.'/../Config/config.php' => config_path('module-block.php')
-        ], 'config');
+            __DIR__.'/../Config/config.php' => config_path('block.php')
+        ], 'block-config');
     }
 }
