@@ -26,7 +26,7 @@ class BlockServiceProvider extends ModuleServiceProvider
     public function boot(Router $router)
     {
         $this->registerConfig();
-        $this->loadViewsFrom(__DIR__ . '/../Resources/views', 'block');
+        $this->loadModuleViewsFrom(__DIR__ . '/../Resources/views', 'block');
         \ClassBlockProvider::registerBlock(Test::class);
         \Route::bind(
             'block_name', function ($value, $route) {
