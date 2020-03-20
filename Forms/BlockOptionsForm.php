@@ -29,7 +29,7 @@ class BlockOptionsForm extends Form
      */
     public function elements(): array
     {
-        $fields = $this->model->fields()->toFormElements();
+        $fields = $this->model->fields()->toFormElements($this->model);
         $fields[] = new Submit();
         return $fields;
     }
