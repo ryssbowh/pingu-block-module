@@ -10,12 +10,14 @@ class BlockOptionsForm extends Form
 {
     protected $block;
     protected $model;
+    protected $updating;
 
     /**
      * Bring variables in your form through the constructor :
      */
-    public function __construct(BlockContract $block, ?Block $model = null)
+    public function __construct(BlockContract $block, bool $updating, ?Block $model = null)
     {
+        $this->updating = $updating;
         $this->block = $block;
         $this->model = $model ? $model : (new Block);
         parent::__construct();
@@ -29,7 +31,7 @@ class BlockOptionsForm extends Form
      */
     public function elements(): array
     {
-        $fields = $this->model->fields()->toFormElements($this->model);
+        $fields = $this->model->fields()->toFormElements($this->model, $this->updating);
         $fields[] = new Submit();
         return $fields;
     }

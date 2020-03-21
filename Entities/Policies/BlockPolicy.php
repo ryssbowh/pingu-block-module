@@ -3,6 +3,7 @@
 namespace Pingu\Block\Entities\Policies;
 
 use Pingu\Block\Entities\Block;
+use Pingu\Entity\Contracts\BundleContract;
 use Pingu\Entity\Entities\Entity;
 use Pingu\Entity\Support\BaseEntityPolicy;
 use Pingu\User\Entities\User;
@@ -40,7 +41,7 @@ class BlockPolicy extends BaseEntityPolicy
         return $user->hasPermissionTo('delete blocks');
     }
 
-    public function create(?User $user)
+    public function create(?User $user, ?BundleContract $bundle = null)
     {
         $user = $this->userOrGuest($user);
         return $user->hasPermissionTo('create blocks');
