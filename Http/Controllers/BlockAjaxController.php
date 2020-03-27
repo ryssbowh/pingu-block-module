@@ -12,8 +12,7 @@ class BlockAjaxController extends BaseController
 
     public function afterCreateOptionsFormCreated(Form $form)
     {
-        $form->addViewSuggestion('forms.modal')
-            ->isAjax();
+        $form->isAjax();
         return ['html' => $form->__toString()];
     }
 
@@ -34,8 +33,7 @@ class BlockAjaxController extends BaseController
 
     public function afterEditOptionsFormCreated(Form $form, Block $block)
     {
-        $form->addViewSuggestion('forms.modal')
-            ->isAjax();
+        $form->isAjax();
         return ['html' => $form->__toString()];
     }
 }
