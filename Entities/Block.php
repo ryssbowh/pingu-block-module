@@ -8,7 +8,7 @@ use Pingu\Block\Contracts\BlockProviderContract;
 use Pingu\Block\Entities\Policies\BlockPolicy;
 use Pingu\Block\Events\BlockCacheChanged;
 use Pingu\Core\Entities\BaseModel;
-use Pingu\Entity\Entities\Entity;
+use Pingu\Entity\Support\Entity;
 use Pingu\Page\Entities\Page;
 use Pingu\Page\Entities\PageRegion;
 use Pingu\Permissions\Entities\Permission;
