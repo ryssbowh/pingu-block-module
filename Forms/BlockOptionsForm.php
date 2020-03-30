@@ -15,9 +15,9 @@ class BlockOptionsForm extends Form
     /**
      * Bring variables in your form through the constructor :
      */
-    public function __construct(BlockContract $block, bool $updating, ?Block $model = null)
+    public function __construct(BlockContract $block, ?Block $model = null)
     {
-        $this->updating = $updating;
+        $this->updating = !is_null($model);
         $this->block = $block;
         $this->model = $model ? $model : (new Block);
         parent::__construct();
@@ -69,7 +69,7 @@ class BlockOptionsForm extends Form
      */
     public function action(): array
     {
-        if ($this->model->exists) {
+        if ($this->updating) {
             return ['url' => Block::uris()->make('update', $this->model)];
         } else {
             return ['url' => Block::uris()->make('store', $this->block->fullMachineName())];

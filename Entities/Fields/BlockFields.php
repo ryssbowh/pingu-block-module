@@ -5,6 +5,7 @@ namespace Pingu\Block\Entities\Fields;
 use Pingu\Field\BaseFields\Boolean;
 use Pingu\Field\BaseFields\Model;
 use Pingu\Field\Support\FieldRepository\BaseFieldRepository;
+use Pingu\Permissions\Entities\Permission;
 
 class BlockFields extends BaseFieldRepository
 {
@@ -20,6 +21,7 @@ class BlockFields extends BaseFieldRepository
             new Model(
                 'permission',
                 [
+                    'model' => Permission::class,
                     'label' => 'Viewing permission',
                     'items' => \Permissions::all()->sortBy('section'),
                     'textField' => ['section', 'name'],
