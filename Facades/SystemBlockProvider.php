@@ -3,10 +3,10 @@ namespace Pingu\Block\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class ClassBlockProvider extends Facade
+class SystemBlockProvider extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'block.providers.class';
+        return 'block.providers.system';
     }
 }

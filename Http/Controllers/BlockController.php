@@ -68,7 +68,6 @@ trait BlockController
     public function validateOptionsRequest(Request $request, BlockContract $block): array
     {
         $modelValidated = (new Block)->validator()->validateRequest($request);
-
         $rules = $block->getOptionsValidationRules();
         $messages = $block->getOptionsValidationMessages();
         $validator = \Validator::make($request->post(), $rules, $messages);

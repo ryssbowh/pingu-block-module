@@ -5,10 +5,12 @@ namespace Pingu\Block\BlockProviders;
 use Pingu\Block\Contracts\BlockContract;
 use Pingu\Block\Contracts\BlockProviderContract;
 use Pingu\Block\Entities\Block;
-use Pingu\Block\Exceptions\ClassBlockProviderException;
+use Pingu\Block\Exceptions\SystemBlockProviderException;
+use Pingu\Block\Renderers\SystemBlockRenderer;
+use Pingu\Block\Support\SystemBlock;
 use Pingu\Forms\Support\Form;
 
-class ClassBlockProvider implements BlockProviderContract
+class SystemBlockProvider implements BlockProviderContract
 {
     /**
      * Blocks registered in this provider
@@ -22,7 +24,7 @@ class ClassBlockProvider implements BlockProviderContract
      */
     public static function machineName(): string
     {
-        return 'class';
+        return 'system';
     }
 
     /**
@@ -38,13 +40,13 @@ class ClassBlockProvider implements BlockProviderContract
      * 
      * @param string|object $class
      */
-    public function registerBlock($class)
+    public function register($class)
     {   
         $class = class_to_object($class);
-        if ($this->isRegistered('class.'.$class->machineName())) {
-            throw ClassBlockProviderException::registered($class);
+        if ($this->isRegistered('system.'.$class->machineName())) {
+            throw SystemBlockProviderException::registered($class);
         }
-        $this->blocks['class.'.$class->machineName()] = $class;
+        $this->blocks['system.'.$class->machineName()] = $class;
         \Blocks::forgetCache();
     }
 
@@ -65,5 +67,13 @@ class ClassBlockProvider implements BlockProviderContract
     public function getRegisteredBlocks(): array
     {
         return $this->blocks;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRenderer(): string
+    {
+        return SystemBlockRenderer::class;
     }
 }

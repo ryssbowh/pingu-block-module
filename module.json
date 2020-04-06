@@ -11,7 +11,7 @@
     ],
     "aliases": {
         "Blocks": "Pingu\\Block\\Facades\\Blocks",
-        "ClassBlockProvider": "Pingu\\Block\\Facades\\ClassBlockProvider"
+        "SystemBlocks": "Pingu\\Block\\Facades\\SystemBlockProvider"
     },
     "files": [
         "functions.php"

@@ -2,6 +2,7 @@
 
 namespace Pingu\Block\Contracts;
 
+use Pingu\Block\Contracts\BlockContract;
 use Pingu\Block\Entities\Block;
 use Pingu\Block\Support\BlockProvider;
 use Pingu\Forms\Support\Form;
@@ -31,4 +32,5 @@ interface BlockProviderContract
      */
     public function load(Block $block): BlockContract;
 
+    public function getRenderer(): string;
 }

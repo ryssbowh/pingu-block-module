@@ -5,9 +5,10 @@ namespace Pingu\Block\Contracts;
 use Illuminate\Contracts\Support\Arrayable;
 use Pingu\Block\Entities\Block;
 use Pingu\Block\Support\BlockProvider;
+use Pingu\Core\Contracts\RenderableContract;
 use Pingu\Forms\Support\Form;
 
-interface BlockContract extends Arrayable
+interface BlockContract extends Arrayable, RenderableContract
 {
     /**
      * Get the form to create options
@@ -22,13 +23,6 @@ interface BlockContract extends Arrayable
      * @return Form
      */
     public function editOptionsForm(Block $block): Form;
-    
-    /**
-     * Renders this block
-     * 
-     * @return view
-     */
-    public function render();
 
     /**
      * Full machine name, eg {providerName}.{blockName}
@@ -86,15 +80,11 @@ interface BlockContract extends Arrayable
      */
     public function provider(): string;
 
-    /**
-     * Default data to be saved for this model
-     * 
-     * @return array
-     */
-    public function getDefaultData(): array;
-
     public function getOptionsValidationRules(): array;
 
     public function getOptionsValidationMessages(): array;
 
+    public function getViewData(): array;
+
+    public function getDefaultData(): array;
 }

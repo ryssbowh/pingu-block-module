@@ -2,7 +2,7 @@
 
 namespace Pingu\Block\Exceptions;
 
-class ClassBlockProviderException extends \Exception
+class SystemBlockProviderException extends \Exception
 {
     public static function registered(string $class)
     {

@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Pingu\Block\Contracts\BlockProviderContract;
 use Pingu\Block\Entities\Block as BlockModel;
 use Pingu\Block\Forms\BlockOptionsForm;
+use Pingu\Core\Contracts\RendererContract;
 use Pingu\Forms\Support\Form;
 
 trait Block
@@ -44,6 +45,22 @@ trait Block
     public function fullMachineName(): string
     {
         return $this->provider().'.'.$this->machineName();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function viewIdentifier(): string
+    {
+        return \Str::kebab($this->fullMachineName());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getViewKey(): string
+    {
+        return \Str::kebab($this->machineName());
     }
 
     /**
@@ -100,8 +117,19 @@ trait Block
     /**
      * @inheritDoc
      */
-    public function getDefaultData(): array
+    public function defaultViewData(): array
     {
         return [];
+    }
+
+    public function getRenderer(): RendererContract
+    {
+        $class = $this->resolveProvider()->getRenderer();
+        return new $class($this);
+    }
+
+    public function render($viewMode = null): string
+    {
+        return $this->getRenderer()->render($viewMode);
     }
 }

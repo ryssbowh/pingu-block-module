@@ -5,8 +5,7 @@ namespace Pingu\Block\Providers;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Routing\Router;
 use Pingu\Block\BlockCreator;
-use Pingu\Block\BlockProviders\ClassBlockProvider;
-use Pingu\Block\BlockProviders\DbBlockProvider;
+use Pingu\Block\BlockProviders\SystemBlockProvider;
 use Pingu\Block\Blocks;
 use Pingu\Block\Blocks\Test;
 use Pingu\Block\Entities\Block;
@@ -27,7 +26,7 @@ class BlockServiceProvider extends ModuleServiceProvider
     {
         $this->registerConfig();
         $this->loadModuleViewsFrom(__DIR__ . '/../Resources/views', 'block');
-        \ClassBlockProvider::registerBlock(Test::class);
+        \SystemBlocks::register(Test::class);
         \Route::bind(
             'block_name', function ($value, $route) {
                 return \Blocks::resolveBlock($value);
@@ -56,7 +55,7 @@ class BlockServiceProvider extends ModuleServiceProvider
     {
         $this->registerEntities($this->entities);
         $this->app->singleton('blocks', Blocks::class);
-        \Blocks::registerProvider(ClassBlockProvider::class);
+        \Blocks::registerProvider(SystemBlockProvider::class);
         $this->app->register(RouteServiceProvider::class);
     }
 

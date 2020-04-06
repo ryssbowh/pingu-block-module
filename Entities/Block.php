@@ -72,9 +72,9 @@ class Block extends Entity
      * 
      * @return BlockProvider
      */
-    public function resolveProvider(): BlockProviderContract
+    public function getProviderAttribute($provider): BlockProviderContract
     {
-        return \Blocks::resolveProvider($this->provider);
+        return \Blocks::resolveProvider($provider);
     }
 
     /**
@@ -94,7 +94,7 @@ class Block extends Entity
     public function instance(): BlockContract
     {
         if (is_null($this->instance)) {
-            $this->instance = $this->resolveProvider()->load($this);
+            $this->instance = $this->provider->load($this);
         }
         return $this->instance;
     }
@@ -117,10 +117,20 @@ class Block extends Entity
     public function toArray()
     {
         $array = parent::toArray();
-        if ($this->provider) {
-            $array['provider'] = $this->provider;
-            $array['instance'] = $this->instance()->toArray();
-        }
+        $array['provider'] = $this->attributes['provider'];
+        $array['instance'] = $this->instance()->toArray();
         return $array;
+    }
+
+    /**
+     * Renders this block
+     *
+     * @param null|int|string|ViewMode $viewMode
+     * 
+     * @return string
+     */
+    public function render($viewMode = null): string
+    {
+        return $this->provider->render($this);
     }
 }
