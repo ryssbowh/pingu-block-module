@@ -24,6 +24,7 @@ class BlockServiceProvider extends ModuleServiceProvider
      */
     public function boot(Router $router)
     {
+        $this->registerEntities($this->entities);
         $this->registerConfig();
         $this->loadModuleViewsFrom(__DIR__ . '/../Resources/views', 'block');
         \SystemBlocks::register(Test::class);
@@ -53,7 +54,6 @@ class BlockServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
-        $this->registerEntities($this->entities);
         $this->app->singleton('blocks', Blocks::class);
         \Blocks::registerProvider(SystemBlockProvider::class);
         $this->app->register(RouteServiceProvider::class);
