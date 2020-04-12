@@ -13,6 +13,9 @@ class SystemBlockRenderer extends BlockRenderer
         parent::__construct($block);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function rendererType(): string
     {
         return 'system';

@@ -2,6 +2,7 @@
 
 namespace Pingu\Block\Support;
 
+use Illuminate\Support\Collection;
 use Pingu\Block\Contracts\BlockContract;
 use Pingu\Core\Support\Renderers\ObjectRenderer;
 use Pingu\Forms\Support\ClassBag;
@@ -37,6 +38,14 @@ abstract class BlockRenderer extends ObjectRenderer
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getHookName(): string
+    {
+        return 'block';
+    }
+
+    /**
      * Classes for the block
      * 
      * @return array
@@ -53,11 +62,11 @@ abstract class BlockRenderer extends ObjectRenderer
     /**
      * @inheritDoc
      */
-    public function getDefaultData(): array
+    public function getDefaultData(): Collection
     {
-        return array_merge([
+        return collect(array_merge([
             'block' => $this->object,
             'classes' => new ClassBag($this->getDefaultClasses()),
-        ], $this->object->getViewData());
+        ], $this->object->getViewData()));
     }
 }
