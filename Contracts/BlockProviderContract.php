@@ -32,5 +32,5 @@ interface BlockProviderContract
      */
     public function load(Block $block): BlockContract;
 
-    public function getRenderer(): string;
+    public function render(Block $block): string;
 }

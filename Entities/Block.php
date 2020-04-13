@@ -7,6 +7,8 @@ use Pingu\Block\Contracts\BlockContract;
 use Pingu\Block\Contracts\BlockProviderContract;
 use Pingu\Block\Entities\Policies\BlockPolicy;
 use Pingu\Block\Events\BlockCacheChanged;
+use Pingu\Core\Contracts\RenderableContract;
+use Pingu\Core\Contracts\RendererContract;
 use Pingu\Core\Entities\BaseModel;
 use Pingu\Entity\Support\Entity;
 use Pingu\Page\Entities\Page;
@@ -37,8 +39,8 @@ class Block extends Entity
         parent::boot();
 
         static::saved(
-            function () {
-                event(new BlockCacheChanged());
+            function ($block) {
+                event(new BlockCacheChanged($block));
             }
         );
     }
@@ -102,12 +104,15 @@ class Block extends Entity
     /**
      * Data getter
      * 
-     * @param string $name
+     * @param ?string $name
      * 
      * @return mixed
      */
-    public function getData(string $name)
+    public function getData(?string $name = null)
     {
+        if (is_null($name)) {
+            return $this->data;
+        }
         return $this->data[$name] ?? null;
     }
 
@@ -124,8 +129,6 @@ class Block extends Entity
 
     /**
      * Renders this block
-     *
-     * @param null|int|string|ViewMode $viewMode
      * 
      * @return string
      */

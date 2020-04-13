@@ -58,22 +58,20 @@ trait BlockController
      */
     public function update(Request $request, Block $block)
     {
-        list($attributes, $data) = $this->validateOptionsRequest($request, $block->instance());
-        $attributes['data'] = $data;
-        $block->saveWithRelations($attributes);
-        $block->refresh();
+        $attributes = $this->validateOptionsRequest($request, $block->instance());
+        $block->fill($attributes)->save();
         return $this->afterSuccessfullUpdate($block);
     }
 
     public function validateOptionsRequest(Request $request, BlockContract $block): array
     {
-        $modelValidated = (new Block)->validator()->validateRequest($request);
+        $validated = (new Block)->validator()->validateRequest($request);
         $rules = $block->getOptionsValidationRules();
         $messages = $block->getOptionsValidationMessages();
         $validator = \Validator::make($request->post(), $rules, $messages);
         $validator->validate();
-        $blockValidated = $validator->validated();
-        return [$modelValidated, array_merge($block->getDefaultData(), $blockValidated)];
+        $validated['data'] = $block->getDefaultData() + $validator->validated();
+        return $validated;
     }
 
     /**

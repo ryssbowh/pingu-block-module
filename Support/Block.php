@@ -11,6 +11,9 @@ use Pingu\Forms\Support\Form;
 
 trait Block
 {
+    /**
+     * @var BlockModel
+     */
     protected $model;
 
     /**
@@ -24,11 +27,23 @@ trait Block
     }
 
     /**
+     * Get the block's data
+     *
+     * @param ?string $name
+     * 
+     * @return mixed
+     */
+    public function getData(?string $name = null)
+    {
+        return $this->model->getData($name);
+    }
+
+    /**
      * @inheritDoc
      */
     public function blockModel(): BlockModel
     {
-        return $this->block;
+        return $this->model;
     }
 
     /**
@@ -120,16 +135,5 @@ trait Block
     public function defaultViewData(): array
     {
         return [];
-    }
-
-    public function getRenderer(): RendererContract
-    {
-        $class = $this->resolveProvider()->getRenderer();
-        return new $class($this);
-    }
-
-    public function render($viewMode = null): string
-    {
-        return $this->getRenderer()->render($viewMode);
     }
 }

@@ -69,4 +69,19 @@ abstract class BlockRenderer extends ObjectRenderer
             'classes' => new ClassBag($this->getDefaultClasses()),
         ], $this->object->getViewData()));
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getDefaultViews(): array
+    {
+        return [
+            $this->viewFolder().'.'.$this->viewIdentifier().'_'.$this->object->blockModel()->getKey(),
+            $this->viewFolder().'.'.$this->viewIdentifier().'_'.$this->viewKey().'_'.$this->object->getViewMode()->machineName.'_'.$this->object->getContent()->getKey(),
+            $this->viewFolder().'.'.$this->viewIdentifier().'_'.$this->viewKey().'_'.$this->object->getViewMode()->machineName,
+            $this->viewFolder().'.'.$this->viewIdentifier().'_'.$this->viewKey(),
+            $this->viewFolder().'.'.$this->viewIdentifier(),
+            $this->object->systemView()
+        ];
+    }
 }

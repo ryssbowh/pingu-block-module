@@ -18,6 +18,9 @@ class BlockPolicy extends BaseEntityPolicy
     public function view(?User $user, Entity $entity)
     {
         $user = $this->userOrGuest($user);
+        if (!$entity->active) {
+            return false;
+        }
         if ($permission = $entity->permission) {
             return $user->hasPermissionTo($permission);
         }

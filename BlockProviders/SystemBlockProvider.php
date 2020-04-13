@@ -72,8 +72,8 @@ class SystemBlockProvider implements BlockProviderContract
     /**
      * @inheritDoc
      */
-    public function getRenderer(): string
+    public function render(Block $block): string
     {
-        return SystemBlockRenderer::class;
+        return (new SystemBlockRenderer($block->instance()))->render();
     }
 }

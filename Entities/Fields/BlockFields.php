@@ -15,9 +15,6 @@ class BlockFields extends BaseFieldRepository
     protected function fields(): array
     {
         return [
-            new Boolean(
-                'active'
-            ),
             new Model(
                 'permission',
                 [
@@ -28,7 +25,10 @@ class BlockFields extends BaseFieldRepository
                     'separator' => ' : ',
                     'noValueLabel' => 'None'
                 ]
-            )
+            ),
+            new Boolean(
+                'active'
+            ),
         ];
     }
 }

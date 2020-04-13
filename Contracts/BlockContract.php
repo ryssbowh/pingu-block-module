@@ -80,11 +80,31 @@ interface BlockContract extends Arrayable, RenderableContract
      */
     public function provider(): string;
 
+    /**
+     * Validation rules for the options
+     * 
+     * @return array
+     */
     public function getOptionsValidationRules(): array;
 
+    /**
+     * Validation messages for the options
+     * 
+     * @return array
+     */
     public function getOptionsValidationMessages(): array;
 
+    /**
+     * Data for the view
+     * 
+     * @return array
+     */
     public function getViewData(): array;
 
+    /**
+     * Default data
+     * 
+     * @return array
+     */
     public function getDefaultData(): array;
 }
