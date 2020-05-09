@@ -5,90 +5,17 @@ namespace Pingu\Block\Http\Controllers;
 use Illuminate\Http\Request;
 use Pingu\Block\Contracts\BlockContract;
 use Pingu\Block\Entities\Block;
+use Pingu\Core\Entities\BaseModel;
 use Pingu\Core\Support\Arr;
+use Pingu\Core\Support\ModelCrudContextController;
 
-trait BlockController
+class BlockController extends ModelCrudContextController
 {
-   
     /**
-     * Create request
-     * 
-     * @return mixed
+     * @inheritDoc
      */
-    public function create()
+    protected function getModel(): BaseModel
     {
-        $block = $this->routeParameter('block_name');
-        $form = $block->createOptionsForm();
-        return $this->afterCreateOptionsFormCreated($form);
-    }
-
-    /**
-     * Delete request
-     * 
-     * @param Block $block
-     * 
-     * @return mixed
-     */
-    public function delete(Block $block)
-    {
-        $block->delete();
-        return $this->afterSuccessfullDeletion($block);
-    }
-
-    /**
-     * Edit request
-     * 
-     * @param Block $block
-     * 
-     * @return mixed
-     */
-    public function edit(Block $block)
-    {
-        $form = $block->instance()->editOptionsForm($block);
-        return $this->afterEditOptionsFormCreated($form, $block);
-    }
-
-    /**
-     * Update request
-     * 
-     * @param Request $request
-     * @param Block   $block 
-     * 
-     * @return mixed
-     */
-    public function update(Request $request, Block $block)
-    {
-        $attributes = $this->validateOptionsRequest($request, $block->instance());
-        $block->fill($attributes)->save();
-        return $this->afterSuccessfullUpdate($block);
-    }
-
-    public function validateOptionsRequest(Request $request, BlockContract $block): array
-    {
-        $validated = (new Block)->validator()->validateRequest($request);
-        $rules = $block->getOptionsValidationRules();
-        $messages = $block->getOptionsValidationMessages();
-        $validator = \Validator::make($request->post(), $rules, $messages);
-        $validator->validate();
-        $validated['data'] = $block->getDefaultData() + $validator->validated();
-        return $validated;
-    }
-
-    /**
-     * Store request.
-     * 
-     * @param Request $request
-     * 
-     * @return mixed
-     */
-    public function store(Request $request)
-    {
-        $block = $this->routeParameter('block_name');
-        list($attributes, $data) = $this->validateOptionsRequest($request, $block);
-        $blockModel = new Block;
-        $blockModel->provider = $block->provider();
-        $blockModel->data = $data;
-        $blockModel->saveWithRelations($attributes);
-        return $this->afterSuccessfullStore($blockModel);
+        return new Block;
     }
 }

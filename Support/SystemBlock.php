@@ -37,4 +37,12 @@ abstract class SystemBlock implements BlockContract
         return 'system';
     }
 
+    /**
+     * @inheritDoc
+     */
+    protected function getOptionsFormFields(): array
+    {
+        return [];
+    }
+
 }

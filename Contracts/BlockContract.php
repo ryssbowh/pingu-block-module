@@ -3,6 +3,7 @@
 namespace Pingu\Block\Contracts;
 
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Http\Request;
 use Pingu\Block\Entities\Block;
 use Pingu\Block\Support\BlockProvider;
 use Pingu\Core\Contracts\RenderableContract;
@@ -15,14 +16,14 @@ interface BlockContract extends Arrayable, RenderableContract
      * 
      * @return Form
      */
-    public function createOptionsForm(): Form;
+    public function createForm(): Form;
 
     /**
      * Get the form to edit options
      * 
      * @return Form
      */
-    public function editOptionsForm(Block $block): Form;
+    public function editForm(): Form;
 
     /**
      * Full machine name, eg {providerName}.{blockName}
@@ -93,6 +94,16 @@ interface BlockContract extends Arrayable, RenderableContract
      * @return array
      */
     public function getOptionsValidationMessages(): array;
+
+    /**
+     * Validate an option request
+     * 
+     * @param Request    $request
+     * @param BlockModel $block
+     * 
+     * @return array
+     */
+    public function validateRequest(Request $request, Block $block): array;
 
     /**
      * Data for the view

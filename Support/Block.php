@@ -2,10 +2,13 @@
 
 namespace Pingu\Block\Support;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Pingu\Block\Contracts\BlockProviderContract;
 use Pingu\Block\Entities\Block as BlockModel;
-use Pingu\Block\Forms\BlockOptionsForm;
+use Pingu\Block\Forms\CreateBlockOptionsForm;
+use Pingu\Block\Forms\EditBlockOptionsForm;
+use Pingu\Block\Support\BlockValidator;
 use Pingu\Core\Contracts\RendererContract;
 use Pingu\Forms\Support\Form;
 
@@ -25,6 +28,13 @@ trait Block
     {
         $this->model = $block;
     }
+
+    /**
+     * Form fields for the options
+     * 
+     * @return array
+     */
+    abstract protected function getOptionsFormFields(): array;
 
     /**
      * Get the block's data
@@ -89,17 +99,27 @@ trait Block
     /**
      * @inheritDoc
      */
-    public function createOptionsForm(): Form
+    public function createForm(): Form
     {
-        return new BlockOptionsForm($this);
+        return BlockModel::forms()->create([$this, new BlockModel, $this->getOptionsFormFields(), $this->createAction()]);
     }
 
     /**
      * @inheritDoc
      */
-    public function editOptionsForm(BlockModel $block): Form
+    public function editForm(): Form
     {
-        return new BlockOptionsForm($this, $block);
+        return BlockModel::forms()->edit([$this, $this->blockModel(), $this->getOptionsFormFields(), $this->editAction()]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateRequest(Request $request, BlockModel $block): array
+    {
+        $validated = (new BlockValidator($this, $block))->validateRequest($request);
+        $validated['provider'] = $this->provider();
+        return $validated;
     }
 
     /**
@@ -135,5 +155,25 @@ trait Block
     public function defaultViewData(): array
     {
         return [];
+    }
+
+    /**
+     * Url to edit this block
+     * 
+     * @return array
+     */
+    protected function editAction(): array
+    {
+        return ['url' => BlockModel::uris()->make('update', $this->model)];
+    }
+
+    /**
+     * Url to create this block
+     * 
+     * @return array
+     */
+    protected function createAction(): array
+    {
+        return ['url' => BlockModel::uris()->make('store', $this->fullMachineName())];
     }
 }

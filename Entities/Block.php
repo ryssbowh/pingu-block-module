@@ -5,12 +5,17 @@ namespace Pingu\Block\Entities;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Pingu\Block\Contracts\BlockContract;
 use Pingu\Block\Contracts\BlockProviderContract;
-use Pingu\Block\Entities\Policies\BlockPolicy;
 use Pingu\Block\Events\BlockCacheChanged;
+use Pingu\Block\Http\Contexts\CreateBlockContext;
+use Pingu\Block\Http\Contexts\EditBlockContext;
+use Pingu\Block\Http\Contexts\StoreBlockContext;
+use Pingu\Block\Http\Contexts\UpdateBlockContext;
+use Pingu\Block\Support\BlockForms;
 use Pingu\Core\Contracts\RenderableContract;
 use Pingu\Core\Contracts\RendererContract;
 use Pingu\Core\Entities\BaseModel;
 use Pingu\Entity\Support\Entity;
+use Pingu\Forms\Contracts\FormRepositoryContract;
 use Pingu\Page\Entities\Page;
 use Pingu\Page\Entities\PageRegion;
 use Pingu\Permissions\Entities\Permission;
@@ -24,6 +29,13 @@ class Block extends Entity
     protected $casts = [
         'data' => 'json',
         'active' => 'bool'
+    ];
+
+    public static $routeContexts = [
+        CreateBlockContext::class,
+        StoreBlockContext::class,
+        EditBlockContext::class,
+        UpdateBlockContext::class
     ];
 
     /**
@@ -59,14 +71,6 @@ class Block extends Entity
     public function permission()
     {
         return $this->belongsTo(Permission::class);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getPolicy(): string
-    {
-        return BlockPolicy::class;
     }
 
     /**
@@ -135,5 +139,13 @@ class Block extends Entity
     public function render($viewMode = null): string
     {
         return $this->provider->render($this);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function forms(): FormRepositoryContract
+    {
+        return new BlockForms;
     }
 }

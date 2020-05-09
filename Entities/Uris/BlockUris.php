@@ -2,9 +2,9 @@
 
 namespace Pingu\Block\Entities\Uris;
 
-use Pingu\Entity\Support\Uris\BaseEntityUris;
+use Pingu\Core\Support\Uris\BaseModelUris;
 
-class BlockUris extends BaseEntityUris
+class BlockUris extends BaseModelUris
 {
     /**
      * @inheritDoc
@@ -12,8 +12,8 @@ class BlockUris extends BaseEntityUris
     protected function uris(): array
     {
         return [
-            'create' => '@entities/create/{block_name}',
-            'store' => '@entities/{block_name}'
+            'create' => '@slugs@/create/{block_name}',
+            'store' => '@slugs@/{block_name}'
         ];
     }
 }
